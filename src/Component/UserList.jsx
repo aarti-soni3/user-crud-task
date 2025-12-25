@@ -68,9 +68,10 @@ export default function UserList() {
       }
       handleCloseDialog();
     } catch (err) {
-      dispatch(setError(err || "Failed to save user"));
-      console.log(err.message, "Failed to save user");
-      showErrorFeedback("Failed to save user");
+      const errorMsg = err.message || "Failed to save user";
+      dispatch(setError(errorMsg));
+      console.error("Error:", errorMsg);
+      showErrorFeedback(errorMsg);
     }
   };
 

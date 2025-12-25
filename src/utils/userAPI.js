@@ -1,4 +1,7 @@
-const API_URL = "https://simplecrudapi.com/api/users";
+import { nanoid } from "nanoid";
+
+const API_URL = "https://jsonplaceholder.typicode.com/users";
+// const API_URL = "https://simplecrudapi.com/api/users";
 
 export const userApi = {
   getAll: async () => {
@@ -8,8 +11,8 @@ export const userApi = {
       const data = await response.json();
       console.log(data);
       console.log(data.data);
-      // return Array.isArray(data) ? data : data.data || [];
-      return data.data || [];
+      // return data.data || [];
+      return Array.isArray(data) ? data : data.data || [];
     } catch (error) {
       throw new Error(error);
     }
@@ -28,17 +31,17 @@ export const userApi = {
   },
 
   create: async (userData) => {
-    console.log(userData)
+    const newId = nanoid();
     try {
       const response = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
+        body: JSON.stringify({ id: newId, ...userData }),
       });
       if (!response.ok) throw new Error("failed to create user");
       const data = await response.json();
       console.log(data);
-      return data.data || data;
+      return data.data ? { ...data.data, id: newId } : { ...data, id: newId };
     } catch (error) {
       throw new Error(error);
     }
